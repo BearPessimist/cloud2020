@@ -1,0 +1,43 @@
+server:
+  port: 8001 #微服务端口号
+
+spring:
+  application:
+    name: cloud-payment-service #服务名称
+  datasource:
+#    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/springcloud?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=GMT
+    username: root
+    password: system56
+
+  #zipkin配置
+  zipkin:
+    base-url: http://localhost:9411 # 监控页面地址
+  sleuth:
+    sampler:
+      #采样率值介于0-1之间，1则表示数据全部采集
+      probability: 1
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.atguigu.springcloud.entities
+
+#Eureka配置
+eureka:
+  client:
+    register-with-eureka: true #是否将本项目注册进EurekaServer，默认为true
+    fetch-registry: true #是否从EurekaServer抓取已有的注册中心，默认为true
+    service-url:
+      defaultZone: http://localhost:7001/eureka # 注册目标的url地址，单机版
+    #eureka集群，将项目发布到多个eureka注册中心当中
+#      defaultZone: http://eureka7001.com:7001/eureka,http://eureka7002.com:7002/eureka
+  #自定义主机名称，不再显示本机ip地址
+  instance:
+    instance-id: payment8001
+    prefer-ip-address: true # 访问路径可以显示IP地址
+#    #禁止自我保护模式
+#    #Eureka客户端向服务端发送心跳的时间间隔，单位为秒（默认为30秒）
+#    lease-renewal-interval-in-seconds: 1
+#    #Eureka服务端在收到最后一次心跳后等待的时间上限，单位为秒（默认是90秒）超时则删除服务
+#    lease-expiration-duration-in-seconds: 2

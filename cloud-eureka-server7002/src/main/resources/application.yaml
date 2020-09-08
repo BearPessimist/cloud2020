@@ -1,0 +1,15 @@
+server:
+  port: 7002
+# 7001和7002是相互守望关联的关系
+eureka:
+  instance:
+    hostname: eureka7002.com #eureka服务端的实例名称
+  client:
+    #false表示不向其它注册中心注册自己
+    register-with-eureka: false
+    #false表示本端就是注册中心，负责维护服务实例，并且不需要去检索服务
+    fetch-registry: false
+    service-url:
+      #集群配置，关联其它的eureka项目,这里关联7001 eureka项目
+      defaultZone: http://eureka7001.com:7001/eureka/
+

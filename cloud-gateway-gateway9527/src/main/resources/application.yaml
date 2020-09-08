@@ -1,0 +1,44 @@
+server:
+  port: 9527
+
+spring:
+  application:
+    name: cloud-gateway
+
+
+  cloud:
+    gateway:
+      routes:
+        - id: payment_routh # 路由id，没有固定要求，建议配合服务名称
+#          uri: http://localhost:8001  #和8001端口匹配提供的路由地址
+          uri: lb://cloud-payment-service  #lb表示负载均衡，从注册中心获取服务
+          predicates:
+            - Path=/payment/get/**  # 断言，路径相匹配的进行路由，对应服务提供者Controller的接口名称
+
+
+        - id: payment_routh
+#          uri: http://localhost:8001
+          # 根据服务名动态获取服务地址
+          uri: lb://cloud-payment-service  #lb表示负载均衡，从注册中心获取服务
+          predicates:
+            - Path=/payment/lb/** # 对应服务提供者里的方法接口
+            - After=2020-08-13T11:58:08.648+08:00[Asia/Shanghai] # 指定什么时间访问服务生效
+#            - Cookie=username,zzyy  # 带cookie的演示，Users\Bear>curl http://localhost:9527/payment/lb --cookie "username=zzyy"
+#             请求头配置
+#            - Header=X-Request-Id, \d+ # 请求头要由X-Request-Id属性并且值为整数的正则表达式
+#        curl http://localhost:9527/payment/lb -H "X-Request-Id:123" 在cmd命令行输入这段地址访问
+
+      discovery:
+        locator:
+          enabled: true # 开启从注册中心动态创建路由的功能，利用微服务名称进行路由转发
+
+eureka:
+  client: # 注册到eureka7001
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://eureka7001.com:7001/eureka/
+  instance:
+    hostname: cloud-gateway-service
+
+

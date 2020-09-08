@@ -1,0 +1,32 @@
+server:
+  port: 3355
+spring:
+  application:
+    name: config-client-3355
+  cloud:
+    config:
+      label: master # 分支名称
+      name: config  #配置文件名称
+      profile: dev # 读取后缀名  # 查找master分支下的config-dev文件
+      uri: http://localhost:3344 #配置中心地址
+  #rabbitmq相关配置
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+# 注册到eureka
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:7001/eureka
+
+# 暴露监控端点
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+
